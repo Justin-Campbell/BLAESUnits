@@ -1,28 +1,23 @@
 # BLAES Units
 
-## Synopsis
-The purpose of this project is to investigate single unit responses to amygdala stimulation (during BLAES experiments).
-<br>
+The purpose of this project is to investigate single unit responses to amygdala stimulation (during BLAES experiments). Microelectrode recordings were re-thresholded after acquisition using `Blackrock Neurotech's Nplay Server`, and were subsequently spike sorted offline using `Plexon's Offline Sorter`.
+
+Description.
+<br><br>
 
 **ProjectID:** `BLAESUnits`  
-Justin Campbell  
-02/22/23
-<br><br>
+Justin Campbell (justin.campbell@hsc.utah.edu)   
+08/12/23
+<br>
 
-# Analyses
-### 1. 
--  
+## Codebook
 
-<br><br>
-
-# Code
-
-### 1. 
-1. 
-
-
-### Supplemental
+### 1. ???
+-
+### 2. ???
+- 
+### 1. ???
 - 
 
-# Figures
+## Figures
 1. 
