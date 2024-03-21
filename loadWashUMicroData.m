@@ -8,10 +8,11 @@ INMANLab_path = 'C:\Users\Justin\Box\INMANLab\'; % path to Inman Lab folder in b
 % INMANLab_path = '/Users/justincampbell/Library/CloudStorage/Box-Box/INMANLab'; % MBP
 if (~exist('load_bcidat')) || (~exist('epoch_BCI_data'))
     addpath(genpath(fullfile(INMANLab_path, 'BCI2000\BCI2000Tools'))); % path to BCI2000Tools
-    % addpath(genpath(fullfile(INMANLab_path, 'BCI2000/BCI2000Tools'))); % MBP
+%     addpath(genpath(fullfile(INMANLab_path, 'BCI2000/BCI2000Tools'))); % MBP
 end
 
 rootDir = 'D:\WashU Unit Data\';
+% rootDir = '/Volumes/155.100.91.44/Data/WashU Unit Data';
 
 %% Patients
 
