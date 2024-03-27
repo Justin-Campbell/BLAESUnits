@@ -1,69 +1,93 @@
-def BLAES_Visbrain(xyz, colors = None, roi_smoothing = 8, elec_size = 20, show_brain = True, ROIs = None, animate = False, save = False):
+def UnitsVisbrain(elec_size = 20, animate = False, save = False):
     """plotBLAESStim() uses the visbrain package (visbrain.org) to generate a 3D model of an MNI brain w/ electrode contacts superimposed. Electrode locations (MNI XYZ coordinates) are defined in each patient's CSMap.mat file.
 
     Inputs:
-        xyz (pd.DataFrame): X,Y,Z coordinates of electrodes (use MNI space if >1 patient).
-        colors (pd.DataFrame, optional): values used to color electrodes.
-        elec_size (float, optional): Marker size for electrode contact(s).
-        roi_smoothing (int, optional): Amount of smoothing to apply to ROI voxels.
+        - elec_size (float, optional): Marker size for electrode contact(s).
+        - animate (bool, optional): If True, the 3D model will rotate. Default is False.
+        - save (bool, optional): If True, the 3D model will be saved as a .png or .giv. Default is False.
         
     Justin M. Campbell (justin.campbell@hsc.utah.edu)
-    07/31/23
+    03/25/24
     """
         
     # Import libraries
-    from visbrain.objects import BrainObj, ColorbarObj, SceneObj, SourceObj, RoiObj
+    from visbrain.objects import BrainObj, SceneObj, SourceObj
     
     # Scene object
-    scene_obj = SceneObj(bgcolor='white', size=(1000, 1000))
+    scene_obj = SceneObj(bgcolor='white', size=(10000, 10000))
     
     # Brain object(s)
-    if show_brain == True:
-        brain_obj = BrainObj('B2', translucent = True)
-        scene_obj.add_to_subplot(brain_obj, row=0, col=0, use_this_cam=True)
-    
-    # ROI object(s)
-    if (ROIs is not None) and 'AMY' in ROIs:
-        roiAMY = RoiObj('aal')
-        roiAMY.select_roi(roiAMY.where_is('amygdala'), translucent = True, smooth = roi_smoothing, roi_to_color={41: 'pink', 42: 'pink'})
-        scene_obj.add_to_subplot(roiAMY, row=0, col=0)
-    if (ROIs is not None) and 'HC' in ROIs:
-        roiHC = RoiObj('aal')
-        roiHC.select_roi(roiHC.where_is('hippocampus'), translucent = True, smooth = roi_smoothing, roi_to_color={37: 'green', 38: 'green'})
-        scene_obj.add_to_subplot(roiHC, row=0, col=0)
+    brain_obj_L = BrainObj('B2', translucent = True, hemisphere = 'left')
+    brain_obj_R = BrainObj('B2', translucent = True, hemisphere = 'right')
+    scene_obj.add_to_subplot(brain_obj_L, row = 0, col = 0)
+    scene_obj.add_to_subplot(brain_obj_R, row = 0, col = 1)
+    brain_obj_L.rotate(fixed = 'right')
+    brain_obj_R.rotate(fixed = 'left')
     
     # Source object(s)
-    if colors is not None:
-        iEEG_obj = SourceObj('iEEG', xyz, radius_min = elec_size, edge_color = 'black', edge_width = 0.5)
-        iEEG_obj.color_sources(data = t_stats, cmap = 'coolwarm')
-        # Colorbar object
-        CBAR_STATE = dict(cbtxtsz=15, txtsz=10, txtcolor = 'black', width=.1, cbtxtsh=3., rect=(-.3, -2., 1., 4.), clim = (-5,5))
-        cbar_obj = ColorbarObj(iEEG_obj, cblabel='Paired t-Stat \n (Pre vs. Post)', **CBAR_STATE)
-        scene_obj.add_to_subplot(cbar_obj, row=0, col=1, width_max=200)
-    else:
-        iEEG_obj = SourceObj('iEEG', xyz, color = (['#000000'] * len(xyz)), radius_min = elec_size) # All black
-    scene_obj.add_to_subplot(iEEG_obj)
+    iEEG_obj_L = SourceObj(name = 'iEEG', xyz = xyz_L, color = colors_L, radius_min = elec_size, edge_color = 'black', edge_width = 0.5)
+    iEEG_obj_R = SourceObj(name = 'iEEG', xyz = xyz_R, color = colors_R, radius_min = elec_size, edge_color = 'black', edge_width = 0.5)
+    scene_obj.add_to_subplot(iEEG_obj_L, row = 0, col = 0)
+    scene_obj.add_to_subplot(iEEG_obj_R, row = 0, col = 1)
 
-    # Preview
-    if animate == True:
-        scene_obj.preview() # static
-        brain_obj.animate(step = 0.5) # video
-    else:
-        scene_obj.preview() # static
-    
     # Export
     if save is True:
-        if animate:
-            scene_obj.record_animation('/Users/justincampbell/Library/CloudStorage/GoogleDrive-u0815766@gcloud.utah.edu/My Drive/Research Projects/BLAES/Results/BLAES_A2/Group/' + feature + '_iEEGModel.gif', n_pic=100) # save video as gif
+        if animate is True:
+            brain_obj_L.animate(step = 0.5) # video
+            brain_obj_R.animate(step = 0.5) # video
+            scene_obj.preview()
+            
+            scene_obj.record_animation(os.path.join(resultsPath, 'Figures', 'iEEGModelGIF.gif'), n_pic=100) # save video as gif
         else:
-            scene_obj.screenshot('/Users/justincampbell/Desktop/iEEGModel.png', transparent=True, print_size = (5,5), autocrop = True, dpi = 1000) # save as image
+            scene_obj.preview()
+            scene_obj.screenshot(os.path.join(resultsPath, 'Figures', 'iEEGModel.png'), transparent=False, print_size = (3,3), autocrop = True, dpi = 1000) # save as image
+    else:
+        scene_obj.preview()
+            
 
 ### IMPLEMENTATION
 if __name__ == '__main__':
+    import os
     import pandas as pd
-    feature = 'Theta'
-    mergedDF = pd.read_csv('/Users/justincampbell/Library/CloudStorage/GoogleDrive-u0815766@gcloud.utah.edu/My Drive/Research Projects/BLAES/Results/BLAES_A2/Group/' + feature + '_MergedDF.csv', index_col = 0)
-    mergedDF = mergedDF[mergedDF['Perm Sig'] == True]
-    all_xyz = mergedDF[['X', 'Y', 'Z']].to_numpy()
-    t_stats = mergedDF['t Stat'].to_numpy()
-    BLAES_Visbrain(all_xyz, t_stats, elec_size = 12.5, animate = True, show_brain = True, ROIs = None, save = True)
+    
+    # Results path
+    resultsPath = '/Users/justincampbell/Library/CloudStorage/GoogleDrive-u0815766@gcloud.utah.edu/My Drive/Research Projects/BLAESUnits/Results/Group/'
+    
+    # Load data
+    statsDF = pd.read_csv(os.path.join(resultsPath, 'SpikeStats.csv'), index_col = 0)
+    regionColorMap = pd.read_csv(os.path.join(resultsPath, 'RegionColorMap.csv'))
+    
+    # Set default
+    regions = statsDF['Region'].unique()
+    xyz = statsDF[['MNI_X', 'MNI_Y', 'MNI_Z']].to_numpy()
+    colors = ['#000000'] * len(xyz)
+    sizes = [20] * len(xyz)
+    
+    # # Color stim contacts
+    # stimIdxs = elecXYZs[elecXYZs['Stim'] == True].index.tolist()
+    # for idx in stimIdxs:
+    #     colors[idx] = '#6bc2a8'
+    
+    # Color by region
+    for region in regions:
+        regionIdxs = statsDF[statsDF['Region'] == region].index.tolist()
+        color = regionColorMap[regionColorMap['Region'] == region]['Color'].values[0]
+        for idx in regionIdxs:
+            colors[idx] = color
+
+    # Split by hemisphere
+    xyz_L = xyz[xyz[:,0] < 0]
+    colors_L = [colors[i] for i in range(len(colors)) if xyz[i,0] < 0]
+    xyz_R = xyz[xyz[:,0] > 0]
+    colors_R = [colors[i] for i in range(len(colors)) if xyz[i,0] > 0]
+    
+    ### Different version that scale electrode size for optimal viewing ###
+    
+    # Preview/localization version:
+    # UnitsVisbrain(elec_size = 40, animate = False, save = False)
+    
+    # Export screenshot version:
+    UnitsVisbrain(elec_size = 80, animate = False, save = True)
+    
+    # Export gif version:
+    # UnitsVisbrain(elec_size = 25, animate = True, save = True)
