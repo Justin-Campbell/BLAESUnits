@@ -1,4 +1,4 @@
-def UnitsVisbrain(elec_size = 20, animate = False, save = False):
+def UnitsVisbrain(elec_size = 20, edge_width = 1, animate = False, save = False):
     """plotBLAESStim() uses the visbrain package (visbrain.org) to generate a 3D model of an MNI brain w/ electrode contacts superimposed. Electrode locations (MNI XYZ coordinates) are defined in each patient's CSMap.mat file.
 
     Inputs:
@@ -25,8 +25,8 @@ def UnitsVisbrain(elec_size = 20, animate = False, save = False):
     brain_obj_R.rotate(fixed = 'left')
     
     # Source object(s)
-    iEEG_obj_L = SourceObj(name = 'iEEG', xyz = xyz_L, color = colors_L, radius_min = elec_size, edge_color = 'black', edge_width = 0.5)
-    iEEG_obj_R = SourceObj(name = 'iEEG', xyz = xyz_R, color = colors_R, radius_min = elec_size, edge_color = 'black', edge_width = 0.5)
+    iEEG_obj_L = SourceObj(name = 'iEEG', xyz = xyz_L, color = colors_L, radius_min = elec_size, edge_color = 'black', edge_width = edge_width)
+    iEEG_obj_R = SourceObj(name = 'iEEG', xyz = xyz_R, color = colors_R, radius_min = elec_size, edge_color = 'black', edge_width = edge_width)
     scene_obj.add_to_subplot(iEEG_obj_L, row = 0, col = 0)
     scene_obj.add_to_subplot(iEEG_obj_R, row = 0, col = 1)
 
@@ -84,10 +84,10 @@ if __name__ == '__main__':
     ### Different version that scale electrode size for optimal viewing ###
     
     # Preview/localization version:
-    # UnitsVisbrain(elec_size = 40, animate = False, save = False)
+    # UnitsVisbrain(elec_size = 40, edge_width = 2, animate = False, save = False)
     
     # Export screenshot version:
-    UnitsVisbrain(elec_size = 80, animate = False, save = True)
+    # UnitsVisbrain(elec_size = 80, edge_width = 5, animate = False, save = True)
     
     # Export gif version:
-    # UnitsVisbrain(elec_size = 25, animate = True, save = True)
+    UnitsVisbrain(elec_size = 20, edge_width = 1, animate = True, save = True)
