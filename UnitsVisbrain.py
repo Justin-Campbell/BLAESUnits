@@ -19,16 +19,16 @@ def UnitsVisbrain(elec_size = 20, edge_width = 1, animate = False, save = False)
     # Brain object(s)
     brain_obj_L = BrainObj('B2', translucent = True, hemisphere = 'left')
     brain_obj_R = BrainObj('B2', translucent = True, hemisphere = 'right')
-    scene_obj.add_to_subplot(brain_obj_L, row = 0, col = 0)
-    scene_obj.add_to_subplot(brain_obj_R, row = 0, col = 1)
-    brain_obj_L.rotate(fixed = 'right')
-    brain_obj_R.rotate(fixed = 'left')
+    scene_obj.add_to_subplot(brain_obj_L, row = 0, col = 1)
+    scene_obj.add_to_subplot(brain_obj_R, row = 0, col = 0)
+    brain_obj_L.rotate(fixed = 'left')
+    brain_obj_R.rotate(fixed = 'right')
     
     # Source object(s)
     iEEG_obj_L = SourceObj(name = 'iEEG', xyz = xyz_L, color = colors_L, radius_min = elec_size, edge_color = 'black', edge_width = edge_width)
     iEEG_obj_R = SourceObj(name = 'iEEG', xyz = xyz_R, color = colors_R, radius_min = elec_size, edge_color = 'black', edge_width = edge_width)
-    scene_obj.add_to_subplot(iEEG_obj_L, row = 0, col = 0)
-    scene_obj.add_to_subplot(iEEG_obj_R, row = 0, col = 1)
+    scene_obj.add_to_subplot(iEEG_obj_L, row = 0, col = 1)
+    scene_obj.add_to_subplot(iEEG_obj_R, row = 0, col = 0)
 
     # Export
     if save is True:
