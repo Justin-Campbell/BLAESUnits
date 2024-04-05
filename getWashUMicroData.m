@@ -5,23 +5,22 @@
 %% Set Paths
 
 INMANLab_path = 'C:\Users\Justin\Box\INMANLab\'; % path to Inman Lab folder in box
-% INMANLab_path = '/Users/justincampbell/Library/CloudStorage/Box-Box/INMANLab'; % MBP
 if (~exist('load_bcidat')) || (~exist('epoch_BCI_data'))
     addpath(genpath(fullfile(INMANLab_path, 'BCI2000\BCI2000Tools'))); % path to BCI2000Tools
-%     addpath(genpath(fullfile(INMANLab_path, 'BCI2000/BCI2000Tools'))); % MBP
 end
 
-rootDir = 'D:\WashU Unit Data\';
-% rootDir = '/Volumes/155.100.91.44/Data/WashU Unit Data';
+rootDir = 'Z:\WashU Unit Data\';
 
 %% Patients
 
 pIDs = {'BJH024', 'BJH025', 'BJH026', 'BJH027', 'BJH028',...
         'BJH029', 'BJH032', 'BJH033', 'BJH035', 'BJH040',...
-        'BJH041', 'BJH042', 'BJH045', 'BJH046'}; % WashU micros; as of 3/6/24
+        'BJH041', 'BJH042', 'BJH045', 'BJH046', 'BJH049'}; % WashU micros; as of 3/28/24
 
-altDirStructure = {'BJH028', 'BJH029', 'BJH032', 'BJH033', 'BJH035', 'BJH040', 'BJH041', 'BJH042'}; % different file structure
-needsV73Compression = {'BJH032', 'BJH033', 'BJH035', 'BJH040', 'BJH042', 'BJH045'};
+% pIDs = {'BJH049'}; % process override (quick process select patients)
+
+altDirStructure = {'BJH028', 'BJH029', 'BJH032', 'BJH033', 'BJH035', 'BJH040', 'BJH041', 'BJH042', 'BJH049'}; % different file structure
+needsV73Compression = {'BJH032', 'BJH033', 'BJH035', 'BJH040', 'BJH042', 'BJH045', 'BJH049'};
 exclude = {};
 
 nPatients = length(pIDs);
@@ -69,6 +68,7 @@ for i = 1:nPatients % loop through patient IDs
 
            % remove analog input chans
            ainpIdxs = find(cellfun(@(x) contains(x, 'ainp'), chanLabels));
+           stimTrigger = signals(:, ainpIdxs(1));
            chanLabels(ainpIdxs) = [];
            signals(:, ainpIdxs) = [];
 
@@ -81,13 +81,16 @@ for i = 1:nPatients % loop through patient IDs
                mkdir(fullfile(rootDir, dirName));
            end
 
-           % export .mat file
-           fprintf('Exporting data for %s \n', strcat(pIDs{i}, '0', string(ii)));
-           if ismember(pIDs{i}, needsV73Compression)
-               save(fullfile(rootDir, dirName, 'BLAES_study_units.mat'), 'signals', 'chanLabels', '-v7.3');
-           else
-               save(fullfile(rootDir, dirName, 'BLAES_study_units.mat'), 'signals', 'chanLabels');
-           end
+           % export .mat file (micro data)
+%            fprintf('Exporting data for %s \n', strcat(pIDs{i}, '0', string(ii)));
+%            if ismember(pIDs{i}, needsV73Compression)
+%                save(fullfile(rootDir, dirName, 'BLAES_study_units.mat'), 'signals', 'chanLabels', '-v7.3');
+%            else
+%                save(fullfile(rootDir, dirName, 'BLAES_study_units.mat'), 'signals', 'chanLabels');
+%            end
+
+           % export .mat file (sync channel)
+           save(fullfile(rootDir, dirName, 'Stim_trigger.mat'), 'stimTrigger');
 
         end % session loop
 
