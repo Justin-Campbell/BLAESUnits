@@ -66,7 +66,7 @@ for i = 1:nPatients % loop through patient IDs
            % get channel labels
            chanLabels = parameters.ChannelNames.Value;
 
-           % remove analog input chans
+           % remove analog input chans (except ainp1: stim trigger)
            ainpIdxs = find(cellfun(@(x) contains(x, 'ainp'), chanLabels));
            stimTrigger = signals(:, ainpIdxs(1));
            chanLabels(ainpIdxs) = [];
@@ -81,13 +81,13 @@ for i = 1:nPatients % loop through patient IDs
                mkdir(fullfile(rootDir, dirName));
            end
 
-           % export .mat file (micro data)
-%            fprintf('Exporting data for %s \n', strcat(pIDs{i}, '0', string(ii)));
-%            if ismember(pIDs{i}, needsV73Compression)
-%                save(fullfile(rootDir, dirName, 'BLAES_study_units.mat'), 'signals', 'chanLabels', '-v7.3');
-%            else
-%                save(fullfile(rootDir, dirName, 'BLAES_study_units.mat'), 'signals', 'chanLabels');
-%            end
+           export .mat file (micro data)
+           fprintf('Exporting data for %s \n', strcat(pIDs{i}, '0', string(ii)));
+           if ismember(pIDs{i}, needsV73Compression)
+               save(fullfile(rootDir, dirName, strcat(pIDs{i}, '_raw.mat')), 'signals', 'chanLabels', '-v7.3');
+           else
+               save(fullfile(rootDir, dirName, strcat(pIDs{i}, '_raw.mat')), 'signals', 'chanLabels');
+           end
 
            % export .mat file (sync channel)
            save(fullfile(rootDir, dirName, 'Stim_trigger.mat'), 'stimTrigger');
