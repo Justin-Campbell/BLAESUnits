@@ -12,18 +12,27 @@ clear all; clc;
 
 %% Get list of patients from processed data folder
 
-processedDataPath = 'E:\My Drive\Research Projects\BLAESUnits';
-dataPrefixes = {'UIC', 'SLC', 'BJH'};
+% processedDataPath = 'E:\My Drive\Research Projects\BLAESUnits';
+processedDataPath = 'C:\Users\Justin\Box\Utah ElecInfo';
 
+dataPrefixes = {'UIC', 'SLC', 'BJH'};
+% 
 % pIDs = {'UIC202202', 'UIC202205', 'UIC202208', 'UIC202210', 'UIC202213',...
 %         'UIC202215', 'UIC202217', 'UIC202306', 'UIC202307',...
 %         'UIC202308', 'UIC202311', 'UIC202314', 'UIC202401', 'BJH024',...
 %         'BJH025', 'BJH026', 'BJH027', 'BJH028', 'BJH029',...
 %         'BJH032', 'BJH033', 'BJH035', 'BJH040', 'BJH041',...
-%         'BJH042'};
+%         'BJH042'}; % BLAESUnits
 
-% NOT YET PROCESSED
-pIDs = {'BJH045', 'BJH046', 'UIC202302'}; % run through LeGUI?
+% pIDs = {'BJH040', 'BJH041', 'BJH042', 'UIC202313', 'UIC202314',...
+%         'UIC202401', 'SLCH018', 'BJH045'}; % BLAES FreqStim
+
+pIDs = {'UIC202202', 'UIC202205', 'UIC202208', 'UIC202210', 'UIC202211', 'UIC202213',...
+         'UIC202215', 'UIC202217', 'UIC202302', 'UIC202306', 'UIC202307',...
+         'UIC202308', 'UIC202311', 'UIC202313', 'UIC202314', 'UIC202401', 'UIC202407'}; % all Utah
+
+% NOT YET PROCESSED IN LEGUI
+% pIDs = {'BJH049'};
 
 % Find the unique patients
 uniquePIDs = unique(pIDs);
