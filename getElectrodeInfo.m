@@ -12,8 +12,8 @@ clear all; clc;
 
 %% Get list of patients from processed data folder
 
-% processedDataPath = 'E:\My Drive\Research Projects\BLAESUnits';
-processedDataPath = 'C:\Users\Justin\Box\Utah ElecInfo';
+processedDataPath = 'E:\My Drive\Research Projects\BLAESUnits\ElectrodeInfo';
+% processedDataPath = 'C:\Users\Justin\Box\Utah ElecInfo';
 
 dataPrefixes = {'UIC', 'SLC', 'BJH'};
 % 

@@ -1,6 +1,9 @@
 % Author:    Justin Campbell
 % Contact:   justin.campbell@hsc.utah.edu 
-% Version:   03-06-2024
+% Version:   05-13-2024
+
+% This script loads the 30 kHz microelectrode data and exports the
+% raw data for subsequent processing
 
 %% Set Paths
 
@@ -17,10 +20,10 @@ pIDs = {'BJH024', 'BJH025', 'BJH026', 'BJH027', 'BJH028',...
         'BJH029', 'BJH032', 'BJH033', 'BJH035', 'BJH040',...
         'BJH041', 'BJH042', 'BJH045', 'BJH046', 'BJH049'}; % WashU micros; as of 3/28/24
 
-% pIDs = {'BJH049'}; % process override (quick process select patients)
+% pIDs = {'BJH024'}; % process override (quick process select patients)
 
 altDirStructure = {'BJH028', 'BJH029', 'BJH032', 'BJH033', 'BJH035', 'BJH040', 'BJH041', 'BJH042', 'BJH049'}; % different file structure
-needsV73Compression = {'BJH032', 'BJH033', 'BJH035', 'BJH040', 'BJH042', 'BJH045', 'BJH049'};
+needsV73Compression = {'BJH032', 'BJH033', 'BJH035', 'BJH040', 'BJH042', 'BJH045', 'BJH049', 'BJH050', 'BJH051'};
 exclude = {};
 
 nPatients = length(pIDs);

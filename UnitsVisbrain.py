@@ -1,5 +1,5 @@
-def UnitsVisbrain(elec_size = 20, edge_width = 1, animate = False, save = False):
-    """plotBLAESStim() uses the visbrain package (visbrain.org) to generate a 3D model of an MNI brain w/ electrode contacts superimposed. Electrode locations (MNI XYZ coordinates) are defined in each patient's CSMap.mat file.
+def UnitsVisbrain(elec_size = 40, edge_width = 2, animate = False, save = False):
+    '''UnitsVisbrain() uses the visbrain package (visbrain.org) to generate a 3D model of an MNI brain w/ electrode contacts superimposed. Electrode locations (MNI XYZ coordinates) are defined in each patient's Electrodes.mat file generated from Tyler's LeGUI pipeline for image coregistration and electrode localization.
 
     Inputs:
         - elec_size (float, optional): Marker size for electrode contact(s).
@@ -8,13 +8,13 @@ def UnitsVisbrain(elec_size = 20, edge_width = 1, animate = False, save = False)
         
     Justin M. Campbell (justin.campbell@hsc.utah.edu)
     03/25/24
-    """
+    '''
         
     # Import libraries
     from visbrain.objects import BrainObj, SceneObj, SourceObj
     
     # Scene object
-    scene_obj = SceneObj(bgcolor='white', size=(10000, 10000))
+    scene_obj = SceneObj(bgcolor='white', size=(1000, 1000))
     
     # Brain object(s)
     brain_obj_L = BrainObj('B2', translucent = True, hemisphere = 'left')
@@ -58,19 +58,16 @@ if __name__ == '__main__':
     regionColorMap = pd.read_csv(os.path.join(resultsPath, 'RegionColorMap.csv'))
     
     # MANUALLY DROP SPECIFIC UNITS
-    statsDF = statsDF[~statsDF['Channel'].str.contains('FUG')]
-    statsDF.reset_index(drop = True, inplace = True)
+    unitsToExclude = pd.read_csv('/Users/justincampbell/Library/CloudStorage/GoogleDrive-u0815766@gcloud.utah.edu/My Drive/Research Projects/BLAESUnits/UnitsToExclude.csv')
+    for index, row in unitsToExclude.iterrows():
+        statsDF = statsDF[~((statsDF['pID'] == row['pID']) & (statsDF['Unit'] == row['Unit']))]
+    statsDF = statsDF.reset_index(drop = True)
     
     # Set default
     regions = statsDF['Region'].unique()
     xyz = statsDF[['MNI_X', 'MNI_Y', 'MNI_Z']].to_numpy()
     colors = ['#000000'] * len(xyz)
     sizes = [20] * len(xyz)
-    
-    # # Color stim contacts
-    # stimIdxs = elecXYZs[elecXYZs['Stim'] == True].index.tolist()
-    # for idx in stimIdxs:
-    #     colors[idx] = '#6bc2a8'
     
     # Color by region
     for region in regions:
@@ -85,13 +82,15 @@ if __name__ == '__main__':
     xyz_R = xyz[xyz[:,0] > 0]
     colors_R = [colors[i] for i in range(len(colors)) if xyz[i,0] > 0]
     
-    ### Different version that scale electrode size for optimal viewing ###
+    ### Different version that scale electrode size for optimal viewing on MBP ###
     
     # Preview/localization version:
-    # UnitsVisbrain(elec_size = 40, edge_width = 2, animate = False, save = False)
+    # UnitsVisbrain()
     
     # Export screenshot version:
-    # UnitsVisbrain(elec_size = 80, edge_width = 5, animate = False, save = True)
+    # UnitsVisbrain(elec_size = 35, edge_width = 1, animate = False, save = True)
+    # UnitsVisbrain(elec_size = 60, edge_width = 3, animate = False, save = True) # MBP
     
     # Export gif version:
-    UnitsVisbrain(elec_size = 15, edge_width = 1, animate = True, save = True)
+    # UnitsVisbrain(elec_size = 25, edge_width = 1, animate = True, save = True)
+    # UnitsVisbrain(elec_size = 30, edge_width = 1, animate = True, save = True) # MBP
