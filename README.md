@@ -21,3 +21,4 @@ Direct electrical stimulation of the human brain has been used for numerous clin
 - `ControlAnalyses.ipynb`: Removes increasing segments of data around each burst onset to determine whther suppression effects is explained by amplifier saturation.
 - `SensitiviyAnalysis.ipynb`: Varies the pre-stim firing-rate threshold used for inclusion/exclusion of units and compares the relative proportion of modulated units.  
 - `BehaviorAnalyses.ipynb`: Analyzes behavioral performance on the memory task and checks for associations between change in memory across conditions and the proportion of modulated units.
+- `PCAAnalyses.ipynb`: Performs linear dimensionality reduction (PCA) and visualizes the first three principal components. Low-dimensional representations are used to visualize population dynamics and firing rate coactivity.
